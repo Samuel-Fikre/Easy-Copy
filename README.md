@@ -1,15 +1,11 @@
-# Astawash - Ethiopian Bank Account Quick Copy
+# Astawash - Quick Copy
 
 A Flutter app that provides a convenient way to store and quickly copy Ethiopian bank account numbers through Android Quick Settings. Perfect for merchants, freelancers, or anyone who frequently needs to share their bank account numbers.
 
 ## Features
 
-✨ **Smart Account Management**
-- Store multiple bank accounts
+- Store multiple bank account numbers
 - Edit or delete saved accounts
-- Supports all Ethiopian banks
-- Smart account number format hints for major banks
-- Autocomplete bank name selection
 
 🔄 **Quick Settings Integration**
 - One-tap account number copy from Quick Settings
@@ -17,11 +13,6 @@ A Flutter app that provides a convenient way to store and quickly copy Ethiopian
 - Selection dialog for multiple accounts
 - Works even when the app is closed
 
-🎨 **Modern Material Design**
-- Clean and intuitive interface
-- Material You theming
-- Smooth animations
-- Responsive layout
 
 🔒 **Privacy & Security**
 - Works completely offline
@@ -29,22 +20,6 @@ A Flutter app that provides a convenient way to store and quickly copy Ethiopian
 - Secure local storage
 - No sensitive data transmission
 
-## Supported Banks
-
-The app includes smart account number format hints for:
-- Commercial Bank of Ethiopia (CBE)
-- Dashen Bank
-- Awash Bank
-
-And supports all other Ethiopian banks including:
-- Abyssinia Bank
-- Birhan Bank
-- Nib Bank
-- United Bank
-- Wegagen Bank
-- Oromia Bank
-- Zemen Bank
-- And any custom bank entry
 
 ## Installation
 
