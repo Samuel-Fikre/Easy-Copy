@@ -90,6 +90,14 @@ class QuickTileService : TileService() {
                 return
             }
 
+            // If there's only one account, copy it directly
+            if (accounts.size == 1) {
+                copyToClipboard(accounts[0].accountNumber)
+                showToast("${accounts[0].bankName.replace("+", " ")} account copied!")
+                return
+            }
+
+            // Show selection dialog for multiple accounts
             showAccountSelection(accounts)
         } catch (e: Exception) {
             Log.e(TAG, "Error reading bank accounts", e)

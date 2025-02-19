@@ -58,6 +58,14 @@ class _AccountNumberScreenState extends State<AccountNumberScreen> {
   static const String keyBankAccounts = 'flutter.bankAccounts';
   bool _isEditing = false;
   int? _editingIndex;
+  String _accountHint = '';
+
+  // Bank account number formats
+  final Map<String, String> _bankFormats = {
+    'Commercial Bank of Ethiopia': '1000123456789',
+    'Dashen Bank': '5123456789',
+    'Awash Bank': '0123456789',
+  };
 
   // Default suggested banks
   final List<String> _suggestedBanks = [
@@ -129,6 +137,12 @@ class _AccountNumberScreenState extends State<AccountNumberScreen> {
       _editingIndex = null;
       _bankNameController.clear();
       _accountController.clear();
+    });
+  }
+
+  void _updateAccountHint(String bankName) {
+    setState(() {
+      _accountHint = _bankFormats[bankName] ?? '';
     });
   }
 
@@ -257,127 +271,145 @@ class _AccountNumberScreenState extends State<AccountNumberScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              _isEditing ? 'Edit Bank Account' : 'Add Bank Account',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                _isEditing ? 'Edit Bank Account' : 'Add Bank Account',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Autocomplete<String>(
-              optionsBuilder: (TextEditingValue textEditingValue) {
-                if (textEditingValue.text.isEmpty) {
-                  return _suggestedBanks;
-                }
-                return [
-                  ..._suggestedBanks,
-                  ..._bankAccounts
-                      .map((account) => account.bankName)
-                      .where((bank) => !_suggestedBanks.contains(bank))
-                ].where((bank) => bank
-                    .toLowerCase()
-                    .contains(textEditingValue.text.toLowerCase()));
-              },
-              onSelected: (String selection) {
-                _bankNameController.text = selection;
-              },
-              fieldViewBuilder:
-                  (context, controller, focusNode, onFieldSubmitted) {
-                _bankNameController = controller;
-                return TextField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  decoration: const InputDecoration(
-                    labelText: 'Bank Name',
-                    border: OutlineInputBorder(),
-                    hintText: 'Enter or select bank name',
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _accountController,
-              decoration: const InputDecoration(
-                labelText: 'Account Number',
-                border: OutlineInputBorder(),
-                hintText: '1000123456789',
-              ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: _saveBankAccount,
-              icon: Icon(_isEditing ? Icons.save : Icons.add),
-              label:
-                  Text(_isEditing ? 'Update Bank Account' : 'Add Bank Account'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(16),
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'Saved Bank Accounts',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _bankAccounts.length,
-                itemBuilder: (context, index) {
-                  final account = _bankAccounts[index];
-                  return Card(
-                    child: ListTile(
-                      title: Text(account.bankName),
-                      subtitle: Text('Account: ${account.accountNumber}'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () => _startEditing(account, index),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () => _deleteAccount(index),
-                          ),
-                        ],
-                      ),
+              const SizedBox(height: 8),
+              Autocomplete<String>(
+                optionsBuilder: (TextEditingValue textEditingValue) {
+                  if (textEditingValue.text.isEmpty) {
+                    return _suggestedBanks;
+                  }
+                  return [
+                    ..._suggestedBanks,
+                    ..._bankAccounts
+                        .map((account) => account.bankName)
+                        .where((bank) => !_suggestedBanks.contains(bank))
+                  ].where((bank) => bank
+                      .toLowerCase()
+                      .contains(textEditingValue.text.toLowerCase()));
+                },
+                onSelected: (String selection) {
+                  _bankNameController.text = selection;
+                  _updateAccountHint(selection);
+                },
+                fieldViewBuilder:
+                    (context, controller, focusNode, onFieldSubmitted) {
+                  _bankNameController = controller;
+                  return TextField(
+                    controller: controller,
+                    focusNode: focusNode,
+                    decoration: const InputDecoration(
+                      labelText: 'Bank Name',
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter or select bank name',
                     ),
+                    onChanged: (value) {
+                      _updateAccountHint(value);
+                    },
                   );
                 },
               ),
-            ),
-            const Divider(),
-            const Text(
-              'Quick Settings Tile',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+              const SizedBox(height: 12),
+              TextField(
+                controller: _accountController,
+                decoration: InputDecoration(
+                  labelText: 'Account Number',
+                  border: const OutlineInputBorder(),
+                  hintText: _accountHint,
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
               ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'To use Quick Settings:\n'
-              '1. Swipe down to open Quick Settings\n'
-              '2. Tap the edit (pencil) icon\n'
-              '3. Find "Copy Account" and drag it to active tiles\n'
-              '4. Tap the tile to see your saved accounts\n'
-              '5. Select an account to copy its number',
-              style: TextStyle(fontSize: 14),
-            ),
-            const SizedBox(height: 20),
-          ],
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: _saveBankAccount,
+                icon: Icon(_isEditing ? Icons.save : Icons.add),
+                label: Text(
+                    _isEditing ? 'Update Bank Account' : 'Add Bank Account'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                ),
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'Saved Bank Accounts',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 200, // Fixed height for the list
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _bankAccounts.length,
+                  itemBuilder: (context, index) {
+                    final account = _bankAccounts[index];
+                    return Card(
+                      child: ListTile(
+                        title: Text(account.bankName),
+                        subtitle: Text('Account: ${account.accountNumber}'),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () => _startEditing(account, index),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () => _deleteAccount(index),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceVariant,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text(
+                      'Quick Settings Tile',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      '1. Swipe down to open Quick Settings\n'
+                      '2. Tap the edit (pencil) icon\n'
+                      '3. Find "Copy Account" and drag it to active tiles\n'
+                      '4. Tap the tile to copy your account number',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
