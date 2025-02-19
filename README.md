@@ -97,15 +97,3 @@ Contributions are welcome! Here are some ways you can contribute:
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Thanks to all Ethiopian banks for their services
-- Flutter team for the amazing framework
-- Material Design team for the beautiful design system
-
-## Contact
-
-Samuel Fikre - [@SamuelFikre](https://twitter.com/SamuelFikre)
-
-Project Link: [https://github.com/Samuel-Fikre/Astawash](https://github.com/Samuel-Fikre/Astawash)
