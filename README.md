@@ -1,4 +1,5 @@
-# Astawash - Quick Copy
+
+# Easy Copy
 
 A Flutter app that provides a convenient way to store and quickly copy Ethiopian bank account numbers through Android Quick Settings. Perfect for merchants, freelancers, or anyone who frequently needs to share their bank account numbers.
 
