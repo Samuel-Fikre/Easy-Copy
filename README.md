@@ -24,7 +24,7 @@ A Flutter app that provides a convenient way to store and quickly copy Ethiopian
 
 ## Installation
 
-1. Download the latest APK from the [releases](https://github.com/Samuel-Fikre/Astawash/releases) section
+1. Download the latest APK from the [releases](https://github.com/Samuel-Fikre/Easy-Copy/releases) section
 2. Install on your Android device (Android 5.0 or later)
 3. Grant permission to display over other apps when prompted
 4. Add the Quick Settings tile:
@@ -59,12 +59,12 @@ A Flutter app that provides a convenient way to store and quickly copy Ethiopian
 ### Setup
 1. Clone the repository:
 ```bash
-git clone https://github.com/Samuel-Fikre/Astawash.git
+git clone https://github.com/Samuel-Fikre/Easy-Copy.git
 ```
 
 2. Install dependencies:
 ```bash
-cd Astawash
+cd Easy-Copy
 flutter pub get
 ```
 
